@@ -13,6 +13,9 @@ public class Main extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Home.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 600);
         stage.setTitle("Mp3 Player");
+        stage.setResizable(false);
+        stage.setWidth(800);
+        stage.setHeight(600);
         stage.setScene(scene);
         stage.show();
     }
