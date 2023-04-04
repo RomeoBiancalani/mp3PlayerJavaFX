@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -11,10 +15,37 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane fx:id="homeId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aloiabiancalani.mp3player.HomeController">
+<BorderPane fx:id="homeId" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.aloiabiancalani.mp3player.controller.HomeController">
    <left>
-      <VBox prefHeight="600.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <VBox prefHeight="600.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView maxHeight="570.0" maxWidth="200.0" minHeight="570.0" minWidth="200.0" prefHeight="570.0" prefWidth="200.0">
+              <columns>
+                <TableColumn maxWidth="145.0" minWidth="145.0" prefWidth="145.0" text="Nome" />
+                  <TableColumn maxWidth="55.0" minWidth="55.0" prefWidth="55.0" text="Durata" />
+              </columns>
+            </TableView>
+            <HBox prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" mnemonicParsing="false" onMouseClicked="#handleDirectoryChoice" prefHeight="30.0" prefWidth="90.0" text="Carica">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="FOLDER" />
+                     </graphic>
+                  </Button>
+                  <Button maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Shuffle">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                     <graphic>
+                        <FontAwesomeIconView text="" />
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
+         </children></VBox>
    </left>
    <center>
       <GridPane BorderPane.alignment="CENTER">
@@ -29,7 +60,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label alignment="CENTER" prefHeight="60.0" prefWidth="600.0" text="Titolo Canzone">
+            <Label alignment="CENTER" maxHeight="60.0" maxWidth="600.0" minHeight="60.0" minWidth="600.0" prefHeight="60.0" prefWidth="600.0" text="Titolo Canzone">
                <font>
                   <Font size="22.0" />
                </font>
@@ -50,7 +81,24 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="button" mnemonicParsing="false" onMouseClicked="#handleDirectoryChoice" text="Prova" />
+                  <Button fx:id="backwardBtn" mnemonicParsing="false">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BACKWARD" size="40" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="playBtn" mnemonicParsing="false">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="PLAY" size="40" />
+                     </graphic>
+                     <HBox.margin>
+                        <Insets left="50.0" right="50.0" />
+                     </HBox.margin>
+                  </Button>
+                  <Button fx:id="forwardBtn" mnemonicParsing="false">
+                     <graphic>
+                        <FontAwesomeIconView glyphName="FORWARD" size="40" />
+                     </graphic>
+                  </Button>
                </children>
             </HBox>
          </children>

@@ -1,4 +1,4 @@
-package com.aloiabiancalani.mp3player;
+package com.aloiabiancalani.mp3player.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,7 +28,7 @@ public class HomeController {
         Stage stage = (Stage) homeId.getScene().getWindow();
         File file = directorychooser.showDialog(stage);
         if(file != null) {
-            System.out.println("Path: " + file.getAbsolutePath());
+            LoadingController.display(file.getAbsolutePath());
         }
 
     }
