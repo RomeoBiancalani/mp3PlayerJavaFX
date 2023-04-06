@@ -5,23 +5,16 @@ import com.aloiabiancalani.mp3player.model.FolderLoader;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.io.IOException;
-import java.net.URL;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class LoadingController {
 
     @FXML
-    private ProgressBar progressBar;
+    private ProgressBar progressBar = new ProgressBar(0);
     private Stage stage;
 
     public String loadingPath;
@@ -29,6 +22,7 @@ public class LoadingController {
     public LoadingController(String loadingPath) {
 
         this.loadingPath = loadingPath;
+
     }
 
     //empty constructor
@@ -36,13 +30,10 @@ public class LoadingController {
 
     }
 
-    //initialize the controller
+    //initialize controller
     public void initialize() {
-
-
         this.stage = new Stage();
 
-//        LoadingController.loadingPath = loadingPath;
         stage.setOnCloseRequest(event -> {
             // prevent window from closing manually
             event.consume();
@@ -54,11 +45,6 @@ public class LoadingController {
     //start the Thread to load mp3 files
     public void startTask() {
         this.initialize(); //initialize controller
-        progressBar = new ProgressBar();
-        Task<Void> task = new FolderLoader(loadingPath, progressBar);
-        progressBar.progressProperty().bind(task.progressProperty()); //bind the progress bar to the thread
-
-
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Loading.fxml"));
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Caricamento della cartella");
@@ -69,9 +55,18 @@ public class LoadingController {
         try {
             Scene scene = new Scene(fxmlLoader.load(), 300, 200);
             stage.setScene(scene);
+
             System.out.println("Caricamento cartella " + loadingPath);
-            FolderLoader folderLoader = new FolderLoader(loadingPath, progressBar);
+            Task<Void> folderLoader = new FolderLoader(loadingPath);
+
             stage.show(); //show stage
+
+            progressBar.progressProperty().bind(folderLoader.progressProperty()); //bind the progress bar to the thread
+            // event listener to track the progress value
+            progressBar.progressProperty().addListener(observable -> {
+                    System.out.println("Changed: " + progressBar.progressProperty().get());
+            });
+
             new Thread(folderLoader).start();
 
             folderLoader.setOnSucceeded(event -> {
@@ -93,6 +88,4 @@ public class LoadingController {
     public void cancelTask() {
         // cancel task if running
     }
-
-
 }

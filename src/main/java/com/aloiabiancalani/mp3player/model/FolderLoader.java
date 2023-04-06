@@ -1,13 +1,9 @@
 package com.aloiabiancalani.mp3player.model;
 
 import com.aloiabiancalani.mp3player.Main;
-import com.aloiabiancalani.mp3player.controller.LoadingController;
 import com.mpatric.mp3agic.*;
 import javafx.concurrent.Task;
-import javafx.scene.Scene;
-import javafx.scene.control.ProgressBar;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+
 
 import java.io.File;
 
@@ -18,13 +14,10 @@ import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 
 public class FolderLoader extends Task<Void> {
-    private ProgressBar progressBar;
     private String loadingPath;
 
-
-    public FolderLoader(String loadingPath, ProgressBar progressBar) {
+    public FolderLoader(String loadingPath) {
         this.loadingPath = loadingPath;
-        this.progressBar = progressBar;
     }
 
     @Override
@@ -37,6 +30,7 @@ public class FolderLoader extends Task<Void> {
             load(dataFolder);
             return null;
         }
+
         // Creazione cartella
         if (!dataFolder.mkdir()) {
             throw new RuntimeException("Errore durante la creazione della cartella data.");
@@ -69,6 +63,7 @@ public class FolderLoader extends Task<Void> {
                             artista = tags.getArtist();
                             album = tags.getAlbum();
                         }
+
                         if (mp3file.hasId3v2Tag()) {
                             ID3v2 tags = mp3file.getId3v2Tag();
                             nome = tags.getTitle();
@@ -96,8 +91,7 @@ public class FolderLoader extends Task<Void> {
                         throw new RuntimeException(e);
                     }
                 }
-                updateProgress(i + 1, 100); //update the progress bar
-//                progressBar.setProgress(i + 10);
+                updateProgress(i, files.length); //update the progress bar
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -108,10 +102,10 @@ public class FolderLoader extends Task<Void> {
             // TODO: write playlist to the binary file
 
 
-
         }
-        System.out.println("Thread end!");
 
+        System.out.println("Thread end!");
+        updateProgress(1,1); //set the progress as completed
         return null;
     }
 
@@ -119,6 +113,5 @@ public class FolderLoader extends Task<Void> {
     private void load(File dataFolder) {
 
     }
-
 
 }
