@@ -27,8 +27,9 @@ public class HomeController {
         final DirectoryChooser directorychooser = new DirectoryChooser();
         Stage stage = (Stage) homeId.getScene().getWindow();
         File file = directorychooser.showDialog(stage);
+        LoadingController loadingController = new LoadingController(file.getAbsolutePath());
         if(file != null) {
-            LoadingController.display(file.getAbsolutePath());
+            loadingController.startTask();
         }
 
     }

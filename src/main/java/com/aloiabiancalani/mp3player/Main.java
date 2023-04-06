@@ -16,7 +16,7 @@ public class Main extends Application {
         stage.setTitle("Mp3 Player");
         stage.setResizable(false);
         stage.setWidth(800);
-        stage.setHeight(600);
+        stage.setHeight(700);
         stage.setScene(scene);
         stage.show();
     }

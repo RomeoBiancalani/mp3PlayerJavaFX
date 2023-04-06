@@ -3,6 +3,7 @@ package com.aloiabiancalani.mp3player.model;
 import com.aloiabiancalani.mp3player.Main;
 import com.aloiabiancalani.mp3player.controller.LoadingController;
 import com.mpatric.mp3agic.*;
+import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
@@ -16,22 +17,25 @@ import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
 
-public class FolderLoader extends Thread {
+public class FolderLoader extends Task<Void> {
     private ProgressBar progressBar;
-    private Window window;
+    private String loadingPath;
 
-    public FolderLoader(Scene scene) {
-//        this.progressBar = scene.getRoot();
-        this.window = scene.getWindow();
+
+    public FolderLoader(String loadingPath, ProgressBar progressBar) {
+        this.loadingPath = loadingPath;
+        this.progressBar = progressBar;
     }
 
-    public void run() {
-        File mp3Folder = new File(LoadingController.loadingPath);
+    @Override
+    protected Void call() throws Exception {
+        System.out.println("Thread start!");
+        File mp3Folder = new File(loadingPath);
         File dataFolder = new File(Paths.get(mp3Folder.getAbsolutePath() + "/.data").toUri());
         if (dataFolder.exists()) {
+            System.out.println("Cartella .data gia' esistente");
             load(dataFolder);
-            closeWindow();
-            return;
+            return null;
         }
         // Creazione cartella
         if (!dataFolder.mkdir()) {
@@ -92,7 +96,8 @@ public class FolderLoader extends Thread {
                         throw new RuntimeException(e);
                     }
                 }
-                progressBar.setProgress(progressBar.getProgress() + 0.1);
+                updateProgress(i + 1, 100); //update the progress bar
+//                progressBar.setProgress(i + 10);
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
@@ -100,21 +105,20 @@ public class FolderLoader extends Thread {
                 }
             }
 
+            // TODO: write playlist to the binary file
+
+
 
         }
+        System.out.println("Thread end!");
 
-
-        // Files.setAttribute(path, "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
-        closeWindow();
+        return null;
     }
 
-    private void closeWindow() {
-        if (window instanceof Stage){
-            ((Stage) window).close();
-        }
-    }
-
+    //TODO: implement loading playlist from the binary file
     private void load(File dataFolder) {
 
     }
+
+
 }
