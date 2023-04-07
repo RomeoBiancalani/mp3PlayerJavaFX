@@ -2,6 +2,7 @@ package com.aloiabiancalani.mp3player.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Playlist implements Serializable {
     private static ArrayList<Brano> playlist = new ArrayList<>();
@@ -18,6 +19,10 @@ public class Playlist implements Serializable {
     }
     public static void addBrano(Brano brano) {
         Playlist.playlist.add(brano);
+    }
+
+    public static void shuffle() {
+        Collections.shuffle(playlist);
     }
 
 }

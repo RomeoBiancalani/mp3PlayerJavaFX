@@ -5,13 +5,13 @@ import com.mpatric.mp3agic.*;
 import javafx.concurrent.Task;
 
 
-import java.io.File;
+import java.io.*;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class FolderLoader extends Task<Void> {
     private String loadingPath;
@@ -27,7 +27,7 @@ public class FolderLoader extends Task<Void> {
         File dataFolder = new File(Paths.get(mp3Folder.getAbsolutePath() + "/.data").toUri());
         if (dataFolder.exists()) {
             System.out.println("Cartella .data gia' esistente");
-            load(dataFolder);
+            loadFromFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
             return null;
         }
 
@@ -91,27 +91,61 @@ public class FolderLoader extends Task<Void> {
                         throw new RuntimeException(e);
                     }
                 }
+
                 updateProgress(i, files.length); //update the progress bar
+
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+
+                // save the playlist to the binary file in the .data directory
+                this.saveToFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
             }
-
-            // TODO: write playlist to the binary file
-
 
         }
 
         System.out.println("Thread end!");
-        updateProgress(1,1); //set the progress as completed
+        updateProgress(1,1); // set the progress as completed
         return null;
     }
 
-    //TODO: implement loading playlist from the binary file
-    private void load(File dataFolder) {
+    // loading from binary file if the .data directory already exists
+    private void loadFromFile(String filename) throws Exception {
+        ObjectInputStream reader=null;
 
+        try {
+            reader = new ObjectInputStream(new FileInputStream(filename));
+            ArrayList<Brano> app =(ArrayList<Brano>) reader.readObject();
+            Playlist.setPlaylist(app); // set the playlist
+            System.out.println(Playlist.getPlaylist());
+        } catch (Exception e) {
+            throw e; //rilancio l'esecuzione
+        }
+        finally {
+            if (reader!=null)
+                reader.close();
+        }
+
+
+    }
+
+
+    // save data to a binary file
+    private void saveToFile(String filename) throws Exception {
+        ObjectOutputStream writer = null;
+
+        try {
+            writer = new ObjectOutputStream(new FileOutputStream(filename));
+            writer.writeObject(Playlist.getPlaylist());
+        } catch(Exception e) {
+            throw e; //rilancio l'eccezione
+        }
+        finally {
+            if (writer != null)
+                writer.close();
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package com.aloiabiancalani.mp3player.controller;
 
+import com.aloiabiancalani.mp3player.model.Playlist;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -32,5 +33,11 @@ public class HomeController {
             loadingController.startTask();
         }
 
+    }
+
+    @FXML
+    private void handleShuffle(MouseEvent mouseEvent) {
+        Playlist.shuffle();
+        System.out.println(Playlist.getPlaylist());
     }
 }

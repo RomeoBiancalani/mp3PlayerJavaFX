@@ -35,7 +35,7 @@
                         <FontAwesomeIconView glyphName="FOLDER" />
                      </graphic>
                   </Button>
-                  <Button maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Shuffle">
+                  <Button onMouseClicked="#handleShuffle" maxHeight="30.0" maxWidth="90.0" minHeight="30.0" minWidth="90.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" text="Shuffle">
                      <HBox.margin>
                         <Insets right="10.0" />
                      </HBox.margin>
