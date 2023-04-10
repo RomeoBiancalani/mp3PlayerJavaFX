@@ -28,6 +28,8 @@ public class FolderLoader extends Task<Void> {
         if (dataFolder.exists()) {
             System.out.println("Cartella .data gia' esistente");
             loadFromFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
+            updateProgress(1,1); // set the progress as completed
+            Thread.sleep(1000);
             return null;
         }
 
@@ -92,7 +94,7 @@ public class FolderLoader extends Task<Void> {
                     }
                 }
 
-                updateProgress(i, files.length); //update the progress bar
+                updateProgress(i, files.length); //aggiorna la progress bar
 
                 try {
                     Thread.sleep(1000);
@@ -100,18 +102,19 @@ public class FolderLoader extends Task<Void> {
                     throw new RuntimeException(e);
                 }
 
-                // save the playlist to the binary file in the .data directory
+                // salva la playlist sul file binario nella cartella .data
                 this.saveToFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
             }
 
         }
-
-        System.out.println("Thread end!");
         updateProgress(1,1); // set the progress as completed
+        Thread.sleep(1000);
+        System.out.println("Thread end!");
+
         return null;
     }
 
-    // loading from binary file if the .data directory already exists
+    // loading dei dati su file binario se la cartella .data esiste gia'
     private void loadFromFile(String filename) throws Exception {
         ObjectInputStream reader=null;
 
@@ -132,7 +135,7 @@ public class FolderLoader extends Task<Void> {
     }
 
 
-    // save data to a binary file
+    // salvataggio dati su file binario
     private void saveToFile(String filename) throws Exception {
         ObjectOutputStream writer = null;
 
