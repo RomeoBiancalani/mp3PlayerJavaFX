@@ -12,11 +12,12 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Home.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 800, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 800, 640);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setTitle("Mp3 Player");
         stage.setResizable(false);
         stage.setWidth(800);
-        stage.setHeight(700);
+        stage.setHeight(640);
         stage.setScene(scene);
         stage.show();
     }

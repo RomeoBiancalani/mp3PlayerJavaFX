@@ -54,7 +54,7 @@ public class LoadingController {
             stage.close();
         });
 
-
+        // Caricamento dei brani sulla table
     }
 
     @FXML
