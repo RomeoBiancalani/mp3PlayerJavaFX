@@ -5,6 +5,7 @@ import com.aloiabiancalani.mp3player.model.Brano;
 import com.aloiabiancalani.mp3player.model.Playlist;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.ObservableList;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.DirectoryChooser;
@@ -30,8 +32,6 @@ import java.util.Objects;
 
 public class HomeController {
 
-    @FXML
-    private Button button;
     @FXML
     private BorderPane homeId;
     @FXML
@@ -91,16 +91,16 @@ public class HomeController {
     private void setupControlsButtons() {
         playBtn.setOnMouseClicked(mouseEvent -> {
             boolean playing = Playlist.getPlayer().getStatus() == MediaPlayer.Status.PLAYING;
-            if (playing)
+            if (playing) //pausing
             {
                 Playlist.getPlayer().pause();
-                FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
-                playBtn.setGraphic(icon);
-            }
-            else {
-                Playlist.getPlayer().play();
-                playBtn.setText(FontAwesomeIcon.PLAY.unicode());
+                handlePauseButton();
 
+
+            }
+            else { //playing
+                Playlist.getPlayer().play();
+                handlePlayButton();
             }
         });
 
@@ -150,17 +150,33 @@ public class HomeController {
     }
 
     private void playNext() {
-        if (Playlist.getPlayingIndex() == 0) {
-            // Se e' arrivato a 0 ha finito la coda e quindi si interrompe
+        if (Playlist.getPlayingIndex() == Playlist.getPlaylist().size() - 1) {
+            // Se e' arrivato all'ultimo elemento ha finito la coda e quindi si interrompe
+            if(Playlist.getPlayer() != null) {
+                Playlist.getPlayer().pause();
+                handlePauseButton();
+            }
             return;
         }
+        if(Playlist.getPlayer() != null) {
+            Playlist.getPlayer().pause();
+        }
+
         Playlist.forwardPlayingBrano();
+        handlePlayButton();
         Brano playing = Playlist.getPlayingBrano();
         songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
         playingBrano(playing);
     }
 
     private void replay() {
+        if(Playlist.getPlayer() != null) {
+            Playlist.getPlayer().pause();
+        }
+
+        Playlist.backwardPlayingBrano();
+        handlePlayButton();
+
         Brano playing = Playlist.getPlayingBrano();
         songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
         playingBrano(playing);
@@ -214,6 +230,16 @@ public class HomeController {
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     Brano rowData = row.getItem();
                     System.out.println("Doppio click: " + rowData);
+
+                    // metto in pausa il brano corrente
+                    if(Playlist.getPlayer() != null) {
+                        Playlist.getPlayer().pause();
+                    }
+
+
+                    handlePlayButton();
+
+
                     playBrano(rowData);
                 }
             });
@@ -223,19 +249,6 @@ public class HomeController {
 
 
     private void setupTableView() {
-        /*
-            ArrayList<ArrayList<String>> rows = new ArrayList<>();
-
-        for (int i = 0; i < indirizzi.size(); i++) {
-            ArrayList<String> row = new ArrayList<>();
-            row.add(indirizzi.get(i));
-            row.add(piscine.get(i).toString());
-            row.add(giardini.get(i).toString());
-            rows.add(row);
-        }
-
-        tableView.getItems().addAll(rows);
-         */
         nomeFieldTable.setCellValueFactory(new PropertyValueFactory<>("titolo"));
         durataFieldTable.setCellValueFactory(new PropertyValueFactory<>("lunghezza"));
         songsTable.setItems(Playlist.getPlaylist());
@@ -356,5 +369,26 @@ public class HomeController {
     private void handleShuffle(MouseEvent mouseEvent) {
         Playlist.shuffle();
         System.out.println(Playlist.getPlaylist());
+    }
+
+
+    // switch from play to pause button
+    @FXML
+    private void handlePlayButton() {
+        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
+        icon.setFill(Color.rgb(35,0,250));
+        icon.setSize("40");
+        icon.setTabSize(8);
+        playBtn.setGraphic(icon);
+    }
+
+    // switch from pause to play button
+    @FXML
+    private void handlePauseButton() {
+        FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);
+        icon.setFill(Color.rgb(35,0,250));
+        icon.setSize("40");
+        icon.setTabSize(8);
+        playBtn.setGraphic(icon);
     }
 }

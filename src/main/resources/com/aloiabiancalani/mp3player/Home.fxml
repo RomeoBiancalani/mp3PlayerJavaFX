@@ -80,7 +80,7 @@
                   </Button>
                   <Button fx:id="playBtn" mnemonicParsing="false" onMouseClicked="#handlePlay" styleClass="controlbutton">
                      <graphic>
-                        <FontAwesomeIconView fill="#2300fa" glyphName="PLAY" size="40" />
+                        <FontAwesomeIconView fill="#2300fa" glyphName="PLAY" size="40" text="" />
                      </graphic>
                      <HBox.margin>
                         <Insets left="50.0" right="50.0" />
