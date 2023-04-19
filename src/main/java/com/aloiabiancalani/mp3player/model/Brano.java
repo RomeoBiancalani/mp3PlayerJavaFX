@@ -4,15 +4,16 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Brano implements Serializable {
-    private String titolo, artista, album, pathCopertina;
+    private String titolo, artista, album, pathCopertina, songPath;
     private long lunghezzaInSecondi;
 
-    public Brano(String titolo, String artista, String album, String pathCopertina, long lunghezzaInSecondi) {
+    public Brano(String titolo, String artista, String album, String pathCopertina, long lunghezzaInSecondi, String songPath) {
         this.titolo = titolo;
         this.artista = artista;
         this.album = album;
         this.pathCopertina = pathCopertina;
         this.lunghezzaInSecondi = lunghezzaInSecondi;
+        this.songPath = songPath;
     }
 
     public String getTitolo() {
@@ -70,6 +71,14 @@ public class Brano implements Serializable {
 
     }
 
+    public String getSongPath() {
+        return songPath;
+    }
+
+    public void setSongPath(String songPath) {
+        this.songPath = songPath;
+    }
+
     @Override
     public String toString() {
         return "Brano{" +
@@ -78,6 +87,6 @@ public class Brano implements Serializable {
                 ", album='" + album + '\'' +
                 ", pathCopertina='" + pathCopertina + '\'' +
                 ", lunghezzaInSecondi=" + lunghezzaInSecondi +
-                '}';
+                ", pathBrano=" + songPath + '}';
     }
 }

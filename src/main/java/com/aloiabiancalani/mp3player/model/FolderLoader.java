@@ -59,12 +59,14 @@ public class FolderLoader extends Task<Void> {
                 if (file.getName().endsWith(".mp3")) {
                     try {
                         Mp3File mp3file = new Mp3File(file.getAbsolutePath());
+//                        System.out.println(file.getAbsolutePath());
                         long durataBrano = mp3file.getLengthInSeconds();
 
                         String nome = file.getName();
                         String artista = "Artista Sconosciuto";
                         String album = "Album Sconosciuto";
                         String copertinaName = Main.class.getResource("defaultCover.jpg").toString();
+                        String songpath = file.getAbsolutePath();
                         byte[] copertina;
 
 
@@ -93,7 +95,7 @@ public class FolderLoader extends Task<Void> {
                             }
                         }
                         System.out.printf("Nome %s, Artista %s, Album %s, Copertina: %s, durata %d\n", nome, artista, album, copertinaName, durataBrano);
-                        Brano brano = new Brano(nome, artista, album, copertinaName, durataBrano);
+                        Brano brano = new Brano(nome, artista, album, copertinaName, durataBrano, songpath);
 
                         Playlist.addBrano(brano);
                         System.out.println(brano);

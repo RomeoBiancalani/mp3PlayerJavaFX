@@ -27,6 +27,8 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -120,7 +122,7 @@ public class HomeController {
             songTitle.setText(playing.getTitolo());
         }
         else {
-            String titolo = getPathBrano(playing.getPathCopertina());
+            String titolo = playing.getTitolo();
             songTitle.setText(titolo.substring(titolo.lastIndexOf("\\") + 1));
         }
         if (playing.getArtista() == null && playing.getAlbum() == null) {
@@ -136,8 +138,10 @@ public class HomeController {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
         songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
-        File songFile = new File(getPathBrano(playing.getPathCopertina()));
-        Media song = new Media(getPathBranoPlayer(playing));
+
+//        System.out.println("path:" + new File(playing.getSongPath()).toURI());
+        Media song = new Media(new File(playing.getSongPath()).toURI().toString());
+
         MediaPlayer player = new MediaPlayer(song);
         player.setOnReady(() -> {
             player.setOnEndOfMedia(() -> {
@@ -201,7 +205,7 @@ public class HomeController {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
         songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
-        Media song = new Media(getPathBranoPlayer(playing));
+        Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString());
         MediaPlayer player = new MediaPlayer(song);
         player.setOnReady(() -> {
             player.play();
@@ -213,13 +217,18 @@ public class HomeController {
         Playlist.setPlayer(player);
     }
 
-    private String getPathBranoPlayer(Brano playing) {
-//        return "file:" + new File(getPathBrano(playing.getPathCopertina())).toURI().toString();
-        return new File(getPathBrano(playing.getPathCopertina())).toURI().toString();
-    }
-    private String getPathBrano(String copertina) {
-        return copertina.replace("\\.data","").replace("/", "\\").replace(".jpg", ".mp3");
-    }
+//    private String getPathBranoPlayer(Brano playing) {
+////        return "file:" + new File(getPathBrano(playing.getPathCopertina())).toURI().toString();
+//        System.out.println(playing.getPathCopertina());
+//        return new File(getPathBrano(playing.getPathCopertina())).toURI().toString();
+//    }
+//    private String getPathBrano(String copertina) {
+//        System.out.println(copertina.replace("\\.data","").replace("/", "\\").replace(".jpg", ".mp3"));
+//        return copertina.replace("\\.data","").replace("/", "\\").replace(".jpg", ".mp3");
+//    }
+
+
+
 
     private void setupSongClick() {
         // Setup del factory della tabella (quando viene aggiunta una nuova riga viene aggiunto il listener per il doppio click)
