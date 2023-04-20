@@ -13,8 +13,8 @@
          <children>
             <TableView fx:id="songsTable" maxHeight="570.0" maxWidth="200.0" minHeight="570.0" minWidth="118.0" prefHeight="570.0" prefWidth="118.0">
               <columns>
-                <TableColumn fx:id="nomeFieldTable" maxWidth="145.0" minWidth="145.0" prefWidth="145.0" styleClass="nameheader" text="Nome" />
-                  <TableColumn fx:id="durataFieldTable" maxWidth="55.0" minWidth="55.0" prefWidth="55.0" styleClass="lenghtheader" text="Durata" />
+                <TableColumn fx:id="nomeFieldTable" maxWidth="145.0" minWidth="132.0" prefWidth="132.0" styleClass="nameheader" text="Nome" />
+                  <TableColumn fx:id="durataFieldTable" maxWidth="68.0" minWidth="55.0" prefWidth="67.0" styleClass="lenghtheader" text="Durata" />
               </columns>
             </TableView>
             <HBox prefHeight="100.0" prefWidth="200.0">

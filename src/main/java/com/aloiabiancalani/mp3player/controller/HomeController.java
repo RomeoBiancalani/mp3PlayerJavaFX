@@ -4,6 +4,8 @@ import com.aloiabiancalani.mp3player.Main;
 import com.aloiabiancalani.mp3player.model.Brano;
 import com.aloiabiancalani.mp3player.model.Playlist;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,6 +15,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -79,7 +83,6 @@ public class HomeController {
         setupTableView();
         handleControlButtons();
         handleMouseEvents();
-
     }
 
     private void handleControlButtons() {
@@ -242,7 +245,6 @@ public class HomeController {
 
             // gestione drag and drop per la riga
             row.setOnDragDetected(event -> {
-
                 if (!row.isEmpty()) {
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
@@ -325,7 +327,7 @@ public class HomeController {
                 loadingEvent.consume();
             });
 
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Loading.fxml")); // load fxml
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/LoadingView.fxml")); // load fxml
             loadingStage.initModality(Modality.APPLICATION_MODAL);
             loadingStage.setTitle("Caricamento della cartella");
             loadingStage.setWidth(300);
@@ -343,10 +345,13 @@ public class HomeController {
             LoadingController controller = fxmlLoader.getController();
             controller.startTask(file.getAbsolutePath(), loadingStage);
 
-            loadingStage.setOnHidden(windowEvent -> { // codice per quando viene chiusa la finestra di caricamento
-                setupFirstPlay();
-            });
-            loadingStage.show(); // mostra finestra di caricamento
+            if(Playlist.getPlaylist().size() != 0) {
+                loadingStage.setOnHidden(windowEvent -> { // codice per quando viene chiusa la finestra di caricamento
+                    setupFirstPlay();
+                });
+                loadingStage.show(); // mostra finestra di caricamento
+            }
+
 
         }
 

@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("Home.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("view/HomeView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 800, 640);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         stage.setTitle("Mp3 Player");
