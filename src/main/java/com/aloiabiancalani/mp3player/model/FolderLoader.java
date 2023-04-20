@@ -28,7 +28,7 @@ public class FolderLoader extends Task<Void> {
         System.out.println("Thread start!");
         File mp3Folder = new File(loadingPath);
         File dataFolder = new File(Paths.get(mp3Folder.getAbsolutePath() + "/.data").toUri());
-        if (dataFolder.exists()) {
+        if (dataFolder.exists()) { // se la cartella .data esiste gia'
             System.out.println("Cartella .data gia' esistente");
             loadFromFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
             updateProgress(1,1); // set the progress as completed
@@ -46,10 +46,7 @@ public class FolderLoader extends Task<Void> {
             throw new RuntimeException(e);
         }
         File[] files = mp3Folder.listFiles();
-        System.out.println("Files: ");
-//        for (File file : files) {
-//            System.out.println(file);
-//        }
+
 
         if (files != null) {
             updateProgress(0,files.length);
@@ -59,7 +56,6 @@ public class FolderLoader extends Task<Void> {
                 if (file.getName().endsWith(".mp3")) {
                     try {
                         Mp3File mp3file = new Mp3File(file.getAbsolutePath());
-//                        System.out.println(file.getAbsolutePath());
                         long durataBrano = mp3file.getLengthInSeconds();
 
                         String nome = file.getName();
@@ -70,6 +66,7 @@ public class FolderLoader extends Task<Void> {
                         byte[] copertina;
 
 
+                        // get dati dal file mp3
                         if (mp3file.hasId3v1Tag()) {
                             ID3v1 tags = mp3file.getId3v1Tag();
                             nome = tags.getTitle();
@@ -94,10 +91,11 @@ public class FolderLoader extends Task<Void> {
                                 }
                             }
                         }
+
                         System.out.printf("Nome %s, Artista %s, Album %s, Copertina: %s, durata %d\n", nome, artista, album, copertinaName, durataBrano);
                         Brano brano = new Brano(nome, artista, album, copertinaName, durataBrano, songpath);
 
-                        Playlist.addBrano(brano);
+                        Playlist.addBrano(brano); // aggiunta brano alla playlist
                         System.out.println(brano);
 
                     } catch (IOException | UnsupportedTagException | InvalidDataException e) {
@@ -135,8 +133,6 @@ public class FolderLoader extends Task<Void> {
         try {
             reader = new ObjectInputStream(new FileInputStream(filename));
             ArrayList<Brano> app =(ArrayList<Brano>) reader.readObject();
-
-//            Playlist.setPlaylist(FXCollections.observableArrayList(app)); // set the playlist
             Playlist.addAll(app);
             System.out.println(Playlist.getPlaylist());
         } catch (Exception e) {
@@ -153,21 +149,18 @@ public class FolderLoader extends Task<Void> {
 
     // salvataggio dati su file binario
     private void saveToFile(String filename) throws Exception {
-//        ObjectOutputStream writer = null;
-//
-//        try {
-//            writer = new ObjectOutputStream(new FileOutputStream(filename));
-//            writer.writeObject(Playlist.getPlaylist());
-//        } catch(Exception e) {
-//            throw e; //rilancio l'eccezione
-//        }
-//        finally {
-//            if (writer != null)
-//                writer.close();
-//        }
-        ArrayList<Brano> brani = new ArrayList<>(Playlist.getPlaylist());
-        ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(filename));
-        writer.writeObject(brani);
+        ObjectOutputStream writer = null;
+        try {
+            ArrayList<Brano> brani = new ArrayList<>(Playlist.getPlaylist());
+            writer = new ObjectOutputStream(new FileOutputStream(filename));
+            writer.writeObject(brani);
+        } catch (Exception e) {
+            throw e;
+        } finally {
+            if (writer != null)
+                writer.close();
+        }
+
     }
 
 }

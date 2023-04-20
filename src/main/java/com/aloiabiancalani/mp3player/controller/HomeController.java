@@ -86,7 +86,7 @@ public class HomeController {
         setupTableView();
         setupSongClick();
         setupControlsButtons();
-//        setupDragAndDrop(); // Rotto, da fixare
+        setupDragAndDrop(); // Rotto, da fixare
 //        setupCurrentlyPlaying();
     }
 
@@ -190,6 +190,7 @@ public class HomeController {
         playingBrano(playing);
     }
 
+    // setup informazioni sul brano corrente e riproduzione
     private void playingBrano(Brano playing) {
         songTitle.setText(playing.getTitolo());
         if (playing.getArtista() == null && playing.getAlbum() == null) {
@@ -205,9 +206,10 @@ public class HomeController {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
         songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
-        Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString());
+
+        Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString()); // set path del brano
         MediaPlayer player = new MediaPlayer(song);
-        player.setOnReady(() -> {
+        player.setOnReady(() -> { // riproduzione brano
             player.play();
             player.setOnEndOfMedia(() -> {
                 player.dispose();
@@ -217,39 +219,21 @@ public class HomeController {
         Playlist.setPlayer(player);
     }
 
-//    private String getPathBranoPlayer(Brano playing) {
-////        return "file:" + new File(getPathBrano(playing.getPathCopertina())).toURI().toString();
-//        System.out.println(playing.getPathCopertina());
-//        return new File(getPathBrano(playing.getPathCopertina())).toURI().toString();
-//    }
-//    private String getPathBrano(String copertina) {
-//        System.out.println(copertina.replace("\\.data","").replace("/", "\\").replace(".jpg", ".mp3"));
-//        return copertina.replace("\\.data","").replace("/", "\\").replace(".jpg", ".mp3");
-//    }
-
-
-
-
     private void setupSongClick() {
         // Setup del factory della tabella (quando viene aggiunta una nuova riga viene aggiunto il listener per il doppio click)
         songsTable.setRowFactory(tv -> {
             TableRow<Brano> row = new TableRow<>();
             row.setOnMouseClicked(event -> {
-//                System.out.println("Evento: " + event);
                 if (event.getClickCount() == 2 && !row.isEmpty()) {
                     Brano rowData = row.getItem();
                     System.out.println("Doppio click: " + rowData);
 
-                    // metto in pausa il brano corrente
+                    // mette in pausa il brano corrente
                     if(Playlist.getPlayer() != null) {
                         Playlist.getPlayer().pause();
                     }
-
-
-                    handlePlayButton();
-
-
-                    playBrano(rowData);
+                    handlePlayButton(); // cambio icona del tasto play
+                    playBrano(rowData); // set brano corrente
                 }
             });
             return row;
@@ -257,6 +241,7 @@ public class HomeController {
     }
 
 
+    // setup tabella
     private void setupTableView() {
         nomeFieldTable.setCellValueFactory(new PropertyValueFactory<>("titolo"));
         durataFieldTable.setCellValueFactory(new PropertyValueFactory<>("lunghezza"));
@@ -264,11 +249,12 @@ public class HomeController {
     }
 
 
+    // gestione drag and drop
     public void setupDragAndDrop() {
         songsTable.setRowFactory(tv -> {
             TableRow<Brano> row = new TableRow<>();
 
-            // Set up drag and drop for the row
+            // Set up drag and drop per la riga
             row.setOnDragDetected(event -> {
                 if (!row.isEmpty()) {
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
@@ -293,12 +279,24 @@ public class HomeController {
                 if (db.hasString() && db.getString().equals("Brano")) {
                     int draggedIndex = songsTable.getSelectionModel().getSelectedIndex();
                     int targetIndex = row.getIndex();
+
+                    System.out.println("init: " + targetIndex);
+                    System.out.println("size:" + Playlist.getPlaylist().size());
+
+                    if(targetIndex >= Playlist.getPlaylist().size()) { // se l'indice e' out of bounds (maggore della dimensione massima della playlist)
+                        targetIndex = Playlist.getPlaylist().size() -1; // spostamento del brano nell'ultima posizione
+                    }
+
+                    System.out.println("target: " + targetIndex);
+                    System.out.println("dragged: " + draggedIndex);
+
                     if (draggedIndex != targetIndex) {
                         ObservableList<Brano> items = songsTable.getItems();
                         Brano draggedItem = items.get(draggedIndex);
                         items.remove(draggedIndex);
                         items.add(targetIndex, draggedItem);
-                        shiftItems(items, Math.min(draggedIndex, targetIndex), targetIndex);
+                        System.out.println("min: " + Math.min(draggedIndex, targetIndex));
+                        shiftItems(items, targetIndex, draggedIndex); // shift brani della playlist
                         songsTable.getSelectionModel().select(targetIndex);
                         success = true;
                     }
@@ -306,28 +304,42 @@ public class HomeController {
                     event.consume();
                 }
             });
-
             return row;
         });
     }
 
+    // scambia posizione dei brani durante il drag and drop
     private void shiftItems(ObservableList<Brano> items, int startIndex, int endIndex) {
-        if (startIndex < 0 || endIndex >= items.size()) {
+        if (startIndex < 0 || endIndex >= items.size()) { // index out of bounds
             return;
         }
-        if (startIndex > endIndex) {
+
+        System.out.println("startindex: " + startIndex);
+        System.out.println("endindex: " + endIndex);
+
+        if (startIndex > endIndex) { // swap indici se startIndex > endIndex
             int temp = startIndex;
             startIndex = endIndex;
             endIndex = temp;
         }
-        Brano temp = items.get(endIndex);
-        for (int i = endIndex; i > startIndex; i--) {
-            items.set(i, items.get(i - 1));
+
+        Brano temp = items.get(endIndex); // get canzone da spostare
+
+        System.out.println("temp: " + temp.toString());
+        int i = 0;
+        for (i = endIndex; i > startIndex+1; i--) { // set nuovo ordinamento dei brani
+            System.out.println("i: " + i);
+            System.out.println("song i: " + items.get(i));
+            System.out.println("song i-1: " + items.get(i-1));
+            items.set(i, items.get(i-1));
         }
-        items.set(startIndex, temp);
+        System.out.println("final i: " + i);
+        System.out.println("endindex: " + endIndex);
+
+        items.set(endIndex, temp); // metto la canzone spostata nella posizione corretta
     }
 
-    //gestisce la scelta della directory e apre la finestra di caricamento
+    // gestisce la scelta della directory e apre la finestra di caricamento
     @FXML
     private void handleDirectoryChoice(MouseEvent event) {
         final DirectoryChooser directorychooser = new DirectoryChooser();
@@ -335,11 +347,11 @@ public class HomeController {
         File file = directorychooser.showDialog(stage);
 
         if(file != null) {
-            // setta la nuova finestra di caricamento
+            // setup finestra di caricamento
             Stage loadingStage = new Stage();
 
             loadingStage.setOnCloseRequest(loadingEvent -> {
-                // prevent window from closing manually
+                // impedisce la chiusura manuale della finestra di caricamento
                 loadingEvent.consume();
             });
 
@@ -361,16 +373,11 @@ public class HomeController {
             LoadingController controller = fxmlLoader.getController();
             controller.startTask(file.getAbsolutePath(), loadingStage);
 
-            loadingStage.setOnHidden(windowEvent -> {
-                // code to run when the loading stage is closed
+            loadingStage.setOnHidden(windowEvent -> { // codice per quando viene chiusa la finestra di caricamento
                 setupFirstPlay();
             });
             loadingStage.show(); // mostra finestra di caricamento
-
         }
-
-
-
     }
 
     // playlist shuffle handler
@@ -381,7 +388,7 @@ public class HomeController {
     }
 
 
-    // switch from play to pause button
+    // switch button da play a pause
     @FXML
     private void handlePlayButton() {
         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
@@ -391,7 +398,7 @@ public class HomeController {
         playBtn.setGraphic(icon);
     }
 
-    // switch from pause to play button
+    // switch button da pause a play
     @FXML
     private void handlePauseButton() {
         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);

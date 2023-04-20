@@ -14,15 +14,9 @@ public class Playlist implements Serializable {
     private static ObservableList<Brano> playlist = FXCollections.observableArrayList();
     private static MediaPlayer player = null;
 
-    public Playlist() {
-    }
 
     public static int getPlayingIndex() {
         return playingIndex;
-    }
-
-    public static void setPlayingIndex(int playingIndex) {
-        Playlist.playingIndex = playingIndex;
     }
 
     public static Brano getPlayingBrano() {
@@ -48,9 +42,6 @@ public class Playlist implements Serializable {
         return playlist;
     }
 
-    public static void setPlaylist(ObservableList<Brano> playlist) {
-        Playlist.playlist = playlist;
-    }
     public static void addBrano(Brano brano) {
         Playlist.playlist.add(brano);
     }

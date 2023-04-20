@@ -8,9 +8,9 @@ import javafx.stage.Stage;
 public class LoadingController {
 
     @FXML
-    private ProgressBar progressBar = new ProgressBar(0);
+    private ProgressBar progressBar = new ProgressBar(0); // progress bar
     private Stage stage;
-    public String loadingPath;
+    public String loadingPath; // path della cartella da caricare
 
 
     //costruttore vuoto
@@ -30,7 +30,7 @@ public class LoadingController {
 
         System.out.println("Caricamento cartella " + loadingPath);
         Task<Void> folderLoader = new FolderLoader(loadingPath);
-        progressBar.progressProperty().bind(folderLoader.progressProperty()); //bind the progress bar to the worker thread
+        progressBar.progressProperty().bind(folderLoader.progressProperty()); //bind la progress bar al worker thread
 
         // event listener per tracciare il valore della progress bar
         progressBar.progressProperty().addListener(observable -> {
@@ -54,11 +54,6 @@ public class LoadingController {
             stage.close();
         });
 
-        // Caricamento dei brani sulla table
     }
 
-    @FXML
-    public void cancelTask() {
-        // cancel task if running
-    }
 }
