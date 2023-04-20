@@ -5,7 +5,6 @@ import com.aloiabiancalani.mp3player.model.Brano;
 import com.aloiabiancalani.mp3player.model.Playlist;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.collections.ObservableList;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -27,10 +26,6 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class HomeController {
 
@@ -84,13 +79,12 @@ public class HomeController {
 //        Per mettere immagine circolare
 //        circle.setFill(new ImagePattern(new Image("path")));
         setupTableView();
-        setupSongClick();
-        setupControlsButtons();
-        setupDragAndDrop(); // Rotto, da fixare
-//        setupCurrentlyPlaying();
+        handleControlButtons();
+        handleMouseEvents();
+
     }
 
-    private void setupControlsButtons() {
+    private void handleControlButtons() {
         playBtn.setOnMouseClicked(mouseEvent -> {
             boolean playing = Playlist.getPlayer().getStatus() == MediaPlayer.Status.PLAYING;
             if (playing) //pausing
@@ -206,7 +200,6 @@ public class HomeController {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
         songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
-
         Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString()); // set path del brano
         MediaPlayer player = new MediaPlayer(song);
         player.setOnReady(() -> { // riproduzione brano
@@ -219,27 +212,6 @@ public class HomeController {
         Playlist.setPlayer(player);
     }
 
-    private void setupSongClick() {
-        // Setup del factory della tabella (quando viene aggiunta una nuova riga viene aggiunto il listener per il doppio click)
-        songsTable.setRowFactory(tv -> {
-            TableRow<Brano> row = new TableRow<>();
-            row.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 && !row.isEmpty()) {
-                    Brano rowData = row.getItem();
-                    System.out.println("Doppio click: " + rowData);
-
-                    // mette in pausa il brano corrente
-                    if(Playlist.getPlayer() != null) {
-                        Playlist.getPlayer().pause();
-                    }
-                    handlePlayButton(); // cambio icona del tasto play
-                    playBrano(rowData); // set brano corrente
-                }
-            });
-            return row;
-        });
-    }
-
 
     // setup tabella
     private void setupTableView() {
@@ -250,12 +222,33 @@ public class HomeController {
 
 
     // gestione drag and drop
-    public void setupDragAndDrop() {
+    public void handleMouseEvents() {
+        // Setup del factory della tabella (quando viene aggiunta una nuova riga viene aggiunto il listener per il doppio click)
         songsTable.setRowFactory(tv -> {
             TableRow<Brano> row = new TableRow<>();
 
-            // Set up drag and drop per la riga
+            // click su una canzone
+            row.setOnMouseClicked(event -> {
+                System.out.println("Evento click: " + event);
+                if (event.getClickCount() == 2 && !row.isEmpty()) { // doppio click: riproduci brano
+                    Brano rowData = row.getItem();
+                    System.out.println("Doppio click: " + rowData);
+
+                    // metto in pausa il brano corrente
+                    if (Playlist.getPlayer() != null) {
+                        Playlist.getPlayer().pause();
+                    }
+
+                    handlePlayButton(); // cambio icona del tasto play
+                    playBrano(rowData); // set brano corrente
+                }
+            });
+
+
+            // gestione drag and drop per la riga
             row.setOnDragDetected(event -> {
+                System.out.println("Evento in drag: " + event);
+
                 if (!row.isEmpty()) {
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent content = new ClipboardContent();
@@ -327,7 +320,7 @@ public class HomeController {
 
         System.out.println("temp: " + temp.toString());
         int i = 0;
-        for (i = endIndex; i > startIndex+1; i--) { // set nuovo ordinamento dei brani
+        for (i = endIndex; i > startIndex+1; i--) { // set nuovo ordine dei brani
             System.out.println("i: " + i);
             System.out.println("song i: " + items.get(i));
             System.out.println("song i-1: " + items.get(i-1));
@@ -336,10 +329,10 @@ public class HomeController {
         System.out.println("final i: " + i);
         System.out.println("endindex: " + endIndex);
 
-        items.set(endIndex, temp); // metto la canzone spostata nella posizione corretta
+        items.set(endIndex, temp); // canzone spostata nella posizione corretta
     }
 
-    // gestisce la scelta della directory e apre la finestra di caricamento
+    //gestisce la scelta della directory e apre la finestra di caricamento
     @FXML
     private void handleDirectoryChoice(MouseEvent event) {
         final DirectoryChooser directorychooser = new DirectoryChooser();
@@ -347,11 +340,11 @@ public class HomeController {
         File file = directorychooser.showDialog(stage);
 
         if(file != null) {
-            // setup finestra di caricamento
+            // setup nuova finestra di caricamento
             Stage loadingStage = new Stage();
 
             loadingStage.setOnCloseRequest(loadingEvent -> {
-                // impedisce la chiusura manuale della finestra di caricamento
+                // impedisce alla finestra di chiudersi manualmente
                 loadingEvent.consume();
             });
 
@@ -377,7 +370,11 @@ public class HomeController {
                 setupFirstPlay();
             });
             loadingStage.show(); // mostra finestra di caricamento
+
         }
+
+
+
     }
 
     // playlist shuffle handler
@@ -388,7 +385,7 @@ public class HomeController {
     }
 
 
-    // switch button da play a pause
+    // switch da play a pause button
     @FXML
     private void handlePlayButton() {
         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PAUSE);
@@ -398,7 +395,7 @@ public class HomeController {
         playBtn.setGraphic(icon);
     }
 
-    // switch button da pause a play
+    // switch da pause a play button
     @FXML
     private void handlePauseButton() {
         FontAwesomeIconView icon = new FontAwesomeIconView(FontAwesomeIcon.PLAY);

@@ -11,31 +11,64 @@ public class Brano implements Serializable {
         this.titolo = titolo;
         this.artista = artista;
         this.album = album;
-        this.pathCopertina = pathCopertina; // path della copertina del brano
+        this.pathCopertina = pathCopertina;
         this.lunghezzaInSecondi = lunghezzaInSecondi;
-        this.songPath = songPath; // path del file mp3
+        this.songPath = songPath;
     }
 
     public String getTitolo() {
         return titolo;
     }
 
+
     public String getArtista() {
         return artista;
     }
+
 
     public String getAlbum() {
         return album;
     }
 
+
     public String getPathCopertina() {
         return pathCopertina;
+    }
+
+    public void setPathCopertina(String pathCopertina) {
+        this.pathCopertina = pathCopertina;
+    }
+
+    public long getLunghezzaInSecondi() {
+        return lunghezzaInSecondi;
+    }
+
+    public void setLunghezzaInSecondi(long lunghezzaInSecondi) {
+        this.lunghezzaInSecondi = lunghezzaInSecondi;
+    }
+
+    public String getLunghezza() {
+        long secondi = this.lunghezzaInSecondi;
+        long hours = secondi / 3600;
+        long minutes = (secondi % 3600) / 60;
+        secondi = secondi % 60;
+        if (minutes != 0 && hours != 0) {
+            return String.format("%02d:%02d:%02d", hours, minutes, secondi);
+        }
+        if (minutes != 0) {
+            return String.format("%02d:%02d", minutes, secondi);
+        }
+        return String.format("%02d", secondi);
+
     }
 
     public String getSongPath() {
         return songPath;
     }
 
+    public void setSongPath(String songPath) {
+        this.songPath = songPath;
+    }
 
     @Override
     public String toString() {
