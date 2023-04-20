@@ -46,8 +46,6 @@ public class FolderLoader extends Task<Void> {
             throw new RuntimeException(e);
         }
         File[] files = mp3Folder.listFiles();
-        System.out.println("Files: ");
-
 
         if (files != null) {
             updateProgress(0,files.length);
@@ -92,7 +90,6 @@ public class FolderLoader extends Task<Void> {
                                 }
                             }
                         }
-                        System.out.printf("Nome %s, Artista %s, Album %s, Copertina: %s, durata %d\n", nome, artista, album, copertinaName, durataBrano);
                         Brano brano = new Brano(nome, artista, album, copertinaName, durataBrano, songpath);
 
                         Playlist.addBrano(brano);
@@ -120,7 +117,7 @@ public class FolderLoader extends Task<Void> {
         saveToFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
         System.out.println("Salvato!");
         updateProgress(1,1); // set the progress as completed
-        Thread.sleep(250);
+        Thread.sleep(500);
         System.out.println("Thread end!");
 
         return null;
@@ -134,7 +131,6 @@ public class FolderLoader extends Task<Void> {
             reader = new ObjectInputStream(new FileInputStream(filename));
             ArrayList<Brano> app =(ArrayList<Brano>) reader.readObject();
 
-//            Playlist.setPlaylist(FXCollections.observableArrayList(app)); // set the playlist
             Playlist.addAll(app);
             System.out.println(Playlist.getPlaylist());
         } catch (Exception e) {
@@ -151,21 +147,19 @@ public class FolderLoader extends Task<Void> {
 
     // salvataggio dati su file binario
     private void saveToFile(String filename) throws Exception {
-//        ObjectOutputStream writer = null;
-//
-//        try {
-//            writer = new ObjectOutputStream(new FileOutputStream(filename));
-//            writer.writeObject(Playlist.getPlaylist());
-//        } catch(Exception e) {
-//            throw e; //rilancio l'eccezione
-//        }
-//        finally {
-//            if (writer != null)
-//                writer.close();
-//        }
-        ArrayList<Brano> brani = new ArrayList<>(Playlist.getPlaylist());
-        ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(filename));
-        writer.writeObject(brani);
+        ObjectOutputStream writer = null;
+
+        try {
+            ArrayList<Brano> brani = new ArrayList<>(Playlist.getPlaylist());
+            writer = new ObjectOutputStream(new FileOutputStream(filename));
+            writer.writeObject(brani);
+        } catch(Exception e) {
+            throw e;
+        }
+        finally {
+            if (writer != null)
+                writer.close();
+        }
     }
 
 }

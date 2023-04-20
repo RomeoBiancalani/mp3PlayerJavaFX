@@ -35,17 +35,6 @@ public class Brano implements Serializable {
         return pathCopertina;
     }
 
-    public void setPathCopertina(String pathCopertina) {
-        this.pathCopertina = pathCopertina;
-    }
-
-    public long getLunghezzaInSecondi() {
-        return lunghezzaInSecondi;
-    }
-
-    public void setLunghezzaInSecondi(long lunghezzaInSecondi) {
-        this.lunghezzaInSecondi = lunghezzaInSecondi;
-    }
 
     public String getLunghezza() {
         long secondi = this.lunghezzaInSecondi;
@@ -64,10 +53,6 @@ public class Brano implements Serializable {
 
     public String getSongPath() {
         return songPath;
-    }
-
-    public void setSongPath(String songPath) {
-        this.songPath = songPath;
     }
 
     @Override

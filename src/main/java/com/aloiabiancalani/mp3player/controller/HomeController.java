@@ -76,8 +76,6 @@ public class HomeController {
 
 
     public void initialize() {
-//        Per mettere immagine circolare
-//        circle.setFill(new ImagePattern(new Image("path")));
         setupTableView();
         handleControlButtons();
         handleMouseEvents();
@@ -133,7 +131,6 @@ public class HomeController {
         }
         songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
 
-//        System.out.println("path:" + new File(playing.getSongPath()).toURI());
         Media song = new Media(new File(playing.getSongPath()).toURI().toString());
 
         MediaPlayer player = new MediaPlayer(song);
@@ -229,10 +226,8 @@ public class HomeController {
 
             // click su una canzone
             row.setOnMouseClicked(event -> {
-                System.out.println("Evento click: " + event);
                 if (event.getClickCount() == 2 && !row.isEmpty()) { // doppio click: riproduci brano
                     Brano rowData = row.getItem();
-                    System.out.println("Doppio click: " + rowData);
 
                     // metto in pausa il brano corrente
                     if (Playlist.getPlayer() != null) {
@@ -247,7 +242,6 @@ public class HomeController {
 
             // gestione drag and drop per la riga
             row.setOnDragDetected(event -> {
-                System.out.println("Evento in drag: " + event);
 
                 if (!row.isEmpty()) {
                     Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
@@ -273,22 +267,15 @@ public class HomeController {
                     int draggedIndex = songsTable.getSelectionModel().getSelectedIndex();
                     int targetIndex = row.getIndex();
 
-                    System.out.println("init: " + targetIndex);
-                    System.out.println("size:" + Playlist.getPlaylist().size());
-
                     if(targetIndex >= Playlist.getPlaylist().size()) { // se l'indice e' out of bounds (maggore della dimensione massima della playlist)
                         targetIndex = Playlist.getPlaylist().size() -1; // spostamento del brano nell'ultima posizione
                     }
-
-                    System.out.println("target: " + targetIndex);
-                    System.out.println("dragged: " + draggedIndex);
 
                     if (draggedIndex != targetIndex) {
                         ObservableList<Brano> items = songsTable.getItems();
                         Brano draggedItem = items.get(draggedIndex);
                         items.remove(draggedIndex);
                         items.add(targetIndex, draggedItem);
-                        System.out.println("min: " + Math.min(draggedIndex, targetIndex));
                         shiftItems(items, targetIndex, draggedIndex); // shift brani della playlist
                         songsTable.getSelectionModel().select(targetIndex);
                         success = true;
@@ -306,10 +293,6 @@ public class HomeController {
         if (startIndex < 0 || endIndex >= items.size()) { // index out of bounds
             return;
         }
-
-        System.out.println("startindex: " + startIndex);
-        System.out.println("endindex: " + endIndex);
-
         if (startIndex > endIndex) { // swap indici se startIndex > endIndex
             int temp = startIndex;
             startIndex = endIndex;
@@ -318,16 +301,10 @@ public class HomeController {
 
         Brano temp = items.get(endIndex); // get canzone da spostare
 
-        System.out.println("temp: " + temp.toString());
         int i = 0;
         for (i = endIndex; i > startIndex+1; i--) { // set nuovo ordine dei brani
-            System.out.println("i: " + i);
-            System.out.println("song i: " + items.get(i));
-            System.out.println("song i-1: " + items.get(i-1));
             items.set(i, items.get(i-1));
         }
-        System.out.println("final i: " + i);
-        System.out.println("endindex: " + endIndex);
 
         items.set(endIndex, temp); // canzone spostata nella posizione corretta
     }
@@ -381,7 +358,6 @@ public class HomeController {
     @FXML
     private void handleShuffle(MouseEvent mouseEvent) {
         Playlist.shuffle();
-        System.out.println(Playlist.getPlaylist());
     }
 
 
