@@ -11,10 +11,10 @@
    <left>
       <VBox prefHeight="600.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="songsTable" maxHeight="570.0" maxWidth="200.0" minHeight="570.0" minWidth="118.0" prefHeight="570.0" prefWidth="118.0">
+            <TableView fx:id="songsTable" maxHeight="570.0" maxWidth="230.0" minHeight="570.0" minWidth="118.0" prefHeight="570.0" prefWidth="230.0">
               <columns>
-                <TableColumn fx:id="nomeFieldTable" maxWidth="145.0" minWidth="132.0" prefWidth="132.0" styleClass="nameheader" text="Nome" />
-                  <TableColumn fx:id="durataFieldTable" maxWidth="68.0" minWidth="55.0" prefWidth="67.0" styleClass="lenghtheader" text="Durata" />
+                <TableColumn fx:id="nomeFieldTable" maxWidth="145.0" minWidth="119.0" prefWidth="127.0" styleClass="nameheader" text="Nome" />
+                  <TableColumn fx:id="durataFieldTable" maxWidth="81.0" minWidth="55.0" prefWidth="73.0" styleClass="lenghtheader" text="Durata" />
               </columns>
             </TableView>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -73,12 +73,12 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="400.0" GridPane.rowIndex="3">
                <children>
-                  <Button fx:id="backwardBtn" mnemonicParsing="false" onMouseClicked="#handleBackwards" styleClass="controlbutton">
+                  <Button fx:id="backwardBtn" mnemonicParsing="false" styleClass="controlbutton">
                      <graphic>
                         <FontAwesomeIconView fill="#2300fa" glyphName="BACKWARD" size="40" text="" />
                      </graphic>
                   </Button>
-                  <Button fx:id="playBtn" mnemonicParsing="false" onMouseClicked="#handlePlay" styleClass="controlbutton">
+                  <Button fx:id="playBtn" mnemonicParsing="false" styleClass="controlbutton">
                      <graphic>
                         <FontAwesomeIconView fill="#2300fa" glyphName="PLAY" size="40" text="" />
                      </graphic>
@@ -88,7 +88,7 @@
                   </Button>
                   <Button fx:id="forwardBtn" mnemonicParsing="false" styleClass="controlbutton">
                      <graphic>
-                        <FontAwesomeIconView fill="#2300fa" glyphName="FORWARD" onMouseClicked="#handleForward" size="40" text="" />
+                        <FontAwesomeIconView fill="#2300fa" glyphName="FORWARD" size="40" text="" />
                      </graphic>
                   </Button>
                </children>

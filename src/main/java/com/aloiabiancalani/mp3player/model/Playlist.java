@@ -26,7 +26,6 @@ public class Playlist implements Serializable {
     }
 
     public static Brano getPlayingBrano() {
-        System.out.println("index: " + playingIndex);
         return playlist.get(playingIndex);
     }
 

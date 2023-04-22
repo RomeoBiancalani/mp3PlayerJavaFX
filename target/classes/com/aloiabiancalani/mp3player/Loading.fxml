@@ -9,7 +9,7 @@
    <center>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="36.0" prefWidth="280.0" text="Caricamento cartella in corso" textAlignment="CENTER" textFill="#2300fa">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="19.0" prefWidth="300.0" text="Caricamento cartella in corso" textAlignment="CENTER" textFill="#2300fa">
                <font>
                   <Font size="18.0" />
                </font>
@@ -20,9 +20,9 @@
                   <Insets top="15.0" />
                </VBox.margin>
             </Label>
-            <ProgressBar fx:id="progressBar" maxWidth="250.0" minWidth="250.0" prefHeight="20.0" prefWidth="250.0" progress="0.0">
+            <ProgressBar fx:id="progressBar" maxWidth="270.0" minWidth="270.0" prefHeight="20.0" prefWidth="270.0" progress="0.0">
                <VBox.margin>
-                  <Insets top="50.0" />
+                  <Insets top="80.0" />
                </VBox.margin>
             </ProgressBar>
          </children>
