@@ -29,7 +29,7 @@ public class LoadingController {
         this.stage = loadingStage; // set stage
 
         System.out.println("Caricamento cartella " + loadingPath);
-        Task<Void> folderLoader = new FolderLoader(loadingPath);
+        FolderLoader folderLoader = new FolderLoader(loadingPath);
         progressBar.progressProperty().bind(folderLoader.progressProperty()); //bind the progress bar to the worker thread
 
         // event listener per tracciare il valore della progress bar
@@ -53,8 +53,6 @@ public class LoadingController {
             System.out.println("Success!");
             stage.close();
         });
-
-        // Caricamento dei brani sulla table
     }
 
     @FXML

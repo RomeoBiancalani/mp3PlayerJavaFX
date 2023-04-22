@@ -28,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class HomeController {
+    private String folderPath;
 
     @FXML
     private BorderPane homeId;
@@ -60,10 +61,18 @@ public class HomeController {
     private TableColumn<Brano, String> nomeFieldTable;
 
     public void initialize() {
+        // load folder
         setupTableView();
         handleControlButtons();
         handleMouseEvents();
+    }
 
+    public String getFolderPath() {
+        return folderPath;
+    }
+
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
     }
 
     private void handleControlButtons() {
@@ -73,8 +82,6 @@ public class HomeController {
             {
                 Playlist.getPlayer().pause();
                 handlePauseButton();
-
-
             }
             else { //playing
                 Playlist.getPlayer().play();
@@ -293,12 +300,19 @@ public class HomeController {
         items.set(endIndex, temp); // canzone spostata nella posizione corretta
     }
 
-    //gestisce la scelta della directory e apre la finestra di caricamento
+
+    // gestisce la scelta della directory
     @FXML
     private void handleDirectoryChoice(MouseEvent event) {
         final DirectoryChooser directorychooser = new DirectoryChooser();
         Stage stage = (Stage) homeId.getScene().getWindow();
         File file = directorychooser.showDialog(stage);
+        handleDirectoryLoading(file, stage);
+    }
+
+    //apre la finestra di caricamento e carica la cartella
+    public void handleDirectoryLoading(File file, Stage stage) {
+
 
         if(file != null) {
             // setup nuova finestra di caricamento
@@ -327,16 +341,22 @@ public class HomeController {
             LoadingController controller = fxmlLoader.getController();
             controller.startTask(file.getAbsolutePath(), loadingStage);
 
+
             loadingStage.setOnHidden(windowEvent -> { // codice per quando viene chiusa la finestra di caricamento
                 setupFirstPlay();
             });
             loadingStage.show(); // mostra finestra di caricamento
+
+            folderPath = file.getAbsolutePath();
+
 
         }
 
 
 
     }
+
+
 
     // playlist shuffle handler
     @FXML
