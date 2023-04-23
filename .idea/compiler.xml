@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="Mp3PlayerJavaFX" />
+        <module name="mp3PlayerJavaFX-0a56716791ea87018ecd6e3008671f7e2b40f456" />
+        <module name="mp3PlayerJavaFX" />
+        <module name="mp3PlayerJavaFX-dev" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

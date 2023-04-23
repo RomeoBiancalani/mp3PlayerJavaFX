@@ -1,0 +1,77 @@
+.background {
+    -fx-background-color: white;
+}
+
+.label {
+    -fx-text-fill: black;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.4) , 10,0,0,1 );
+}
+
+/* info canzone */
+.songinfo {
+    -fx-text-fill: #2300FA;
+}
+
+
+/* buttons */
+.controlbutton {
+    -fx-background-color: transparent;
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.8) , 10,0,0,1 );
+}
+
+.loadbutton {
+    -fx-background-color: #3EADFD;
+    -fx-text-fill: black;
+    -fx-effect: innershadow( gaussian , rgba(0,0,0,0.4) , 10,0,0,1 );
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.4) , 10,0,0,1 );
+
+}
+
+.shufflebutton {
+    -fx-background-color: #7A58FF;
+    -fx-text-fill: black;
+    -fx-effect: innershadow( gaussian , rgba(0,0,0,0.4) , 10,0,0,1 );
+    -fx-effect: dropshadow( gaussian , rgba(0,0,0,0.4) , 10,0,0,1 );
+
+}
+
+
+
+/* table view */
+.nameheader {
+    -fx-background-color: #6796F0;
+}
+
+.lenghtheader {
+    -fx-background-color: #9FE8FF;
+}
+
+/* colore evidenziazione riga */
+.table-row-cell:selected .table-cell {
+    -fx-background-color: #9A25C3;
+}
+
+
+
+/* nascondi scroll bar orizzontale nella table view */
+
+.table-view *.scroll-bar:horizontal *.increment-button,
+.table-view *.scroll-bar:horizontal *.decrement-button {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.table-view *.scroll-bar:horizontal *.increment-arrow,
+.table-view *.scroll-bar:horizontal *.decrement-arrow {
+    -fx-background-color: null;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-shape: null;
+}
+
+
+
+
