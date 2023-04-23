@@ -60,7 +60,6 @@ public class HomeController {
     private TableColumn<Brano, String> nomeFieldTable;
 
     public void initialize() {
-        // load folder
         setupTableView();
         handleControlButtons();
         handleMouseEvents();
@@ -210,7 +209,6 @@ public class HomeController {
             LoadingController controller = fxmlLoader.getController();
             controller.startTask(file.getAbsolutePath(), loadingStage);
 
-
             loadingStage.setOnHidden(windowEvent -> { // codice per quando viene chiusa la finestra di caricamento
                 setupFirstPlay();
             });
@@ -218,10 +216,6 @@ public class HomeController {
 
             folderPath = file.getAbsolutePath();
         }
-    }
-
-    public void setFolderPath(String folderPath) {
-        this.folderPath = folderPath;
     }
 
     // handler per il controllo della riproduzione
@@ -380,7 +374,10 @@ public class HomeController {
     // playlist shuffle handler
     @FXML
     private void handleShuffle(MouseEvent mouseEvent) {
+        Brano playing = Playlist.getPlayingBrano();
         Playlist.shuffle();
+        int newIndex = Playlist.getPlaylist().indexOf(playing);
+        Playlist.setPlayingIndex(newIndex);
     }
 
 

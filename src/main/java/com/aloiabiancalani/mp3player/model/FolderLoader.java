@@ -25,20 +25,20 @@ public class FolderLoader extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-//        System.out.println("Thread start!");
         File mp3Folder = new File(loadingPath);
+        Playlist.clearPlaylist();
         File dataFolder = new File(Paths.get(mp3Folder.getAbsolutePath() + "/.data").toUri());
         if (dataFolder.exists()) {
-//            System.out.println("Cartella .data gia' esistente");
+            System.out.println("Cartella .data gia' esistente");
             loadFromFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
             updateProgress(1,1); // set the progress as completed
             Thread.sleep(500);
             return null;
         }
 
-        // Creazione cartella
+        // creazione cartella
         if (!dataFolder.mkdir()) {
-            throw new RuntimeException("Errore durante la creazione della cartella");
+            throw new RuntimeException("Errore durante la creazione della cartella data.");
         }
         try {
             Files.setAttribute(dataFolder.toPath(), "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
@@ -63,7 +63,6 @@ public class FolderLoader extends Task<Void> {
                         String copertinaName = Main.class.getResource("defaultCover.jpg").toString();
                         String songpath = file.getAbsolutePath();
                         byte[] copertina;
-
 
                         // get dati dal file mp3
                         if (mp3file.hasId3v1Tag()) {
@@ -92,7 +91,7 @@ public class FolderLoader extends Task<Void> {
                         }
                         Brano brano = new Brano(nome, artista, album, copertinaName, durataBrano, songpath);
 
-                        Playlist.addBrano(brano); // aggiunta brano alla playlist
+                        Playlist.addBrano(brano);
 
                     } catch (IOException | UnsupportedTagException | InvalidDataException e) {
                         throw new RuntimeException(e);
@@ -104,17 +103,19 @@ public class FolderLoader extends Task<Void> {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                updateProgress(i, files.length - 1); // aggiorna la progress bar
+
+                updateProgress(i, files.length - 1); //aggiorna la progress bar
             }
+
         }
 
         // salva la playlist sul file binario nella cartella .data
-//        System.out.println("Salvo il bin: " + mp3Folder.getAbsolutePath() + "/.data/brani.bin");
+        System.out.println("Salvo il bin: " + mp3Folder.getAbsolutePath() + "/.data/brani.bin");
         saveToFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
-//        System.out.println("Salvato!");
+        System.out.println("Salvato!");
         updateProgress(1,1); // setta il progresso del caricamento come completato
         Thread.sleep(500);
-//        System.out.println("Thread end!");
+
 
         return null;
     }
@@ -128,7 +129,6 @@ public class FolderLoader extends Task<Void> {
             ArrayList<Brano> app =(ArrayList<Brano>) reader.readObject();
 
             Playlist.addAll(app);
-            System.out.println(Playlist.getPlaylist());
         } catch (Exception e) {
             throw e;
         }
@@ -136,6 +136,8 @@ public class FolderLoader extends Task<Void> {
             if (reader!=null)
                 reader.close();
         }
+
+
     }
 
 
