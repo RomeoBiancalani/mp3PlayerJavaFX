@@ -25,11 +25,11 @@ public class FolderLoader extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        System.out.println("Thread start!");
+//        System.out.println("Thread start!");
         File mp3Folder = new File(loadingPath);
         File dataFolder = new File(Paths.get(mp3Folder.getAbsolutePath() + "/.data").toUri());
         if (dataFolder.exists()) {
-            System.out.println("Cartella .data gia' esistente");
+//            System.out.println("Cartella .data gia' esistente");
             loadFromFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
             updateProgress(1,1); // set the progress as completed
             Thread.sleep(500);
@@ -38,7 +38,7 @@ public class FolderLoader extends Task<Void> {
 
         // Creazione cartella
         if (!dataFolder.mkdir()) {
-            throw new RuntimeException("Errore durante la creazione della cartella data.");
+            throw new RuntimeException("Errore durante la creazione della cartella");
         }
         try {
             Files.setAttribute(dataFolder.toPath(), "dos:hidden", Boolean.TRUE, LinkOption.NOFOLLOW_LINKS);
@@ -92,38 +92,34 @@ public class FolderLoader extends Task<Void> {
                         }
                         Brano brano = new Brano(nome, artista, album, copertinaName, durataBrano, songpath);
 
-                        Playlist.addBrano(brano);
-                        System.out.println(brano);
+                        Playlist.addBrano(brano); // aggiunta brano alla playlist
 
                     } catch (IOException | UnsupportedTagException | InvalidDataException e) {
                         throw new RuntimeException(e);
                     }
                 }
 
-
-
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-
-            updateProgress(i, files.length - 1); //aggiorna la progress bar
+                updateProgress(i, files.length - 1); // aggiorna la progress bar
             }
-
         }
+
         // salva la playlist sul file binario nella cartella .data
-        System.out.println("Salvo il bin: " + mp3Folder.getAbsolutePath() + "/.data/brani.bin");
+//        System.out.println("Salvo il bin: " + mp3Folder.getAbsolutePath() + "/.data/brani.bin");
         saveToFile(mp3Folder.getAbsolutePath() + "/.data/brani.bin");
-        System.out.println("Salvato!");
-        updateProgress(1,1); // set the progress as completed
+//        System.out.println("Salvato!");
+        updateProgress(1,1); // setta il progresso del caricamento come completato
         Thread.sleep(500);
-        System.out.println("Thread end!");
+//        System.out.println("Thread end!");
 
         return null;
     }
 
-    // loading dei dati su file binario se la cartella .data esiste gia'
+    // caricamento dei dati dal file binario se la cartella .data esiste gia'
     private void loadFromFile(String filename) throws Exception {
         ObjectInputStream reader=null;
 
@@ -140,8 +136,6 @@ public class FolderLoader extends Task<Void> {
             if (reader!=null)
                 reader.close();
         }
-
-
     }
 
 

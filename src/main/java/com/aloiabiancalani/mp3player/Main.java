@@ -51,9 +51,10 @@ public class Main extends Application {
                 FileWriter writer = new FileWriter("src/main/resources/com/aloiabiancalani/mp3player/folderPath.txt");
                 writer.write(homeController.getFolderPath());
                 writer.close();
+                System.out.println("Path della cartella salvata correttamente!");
             }
             catch (Exception e) {
-                System.out.println("errore in scrittura");
+                System.out.println("Nessuna path salvata.");
             }
         });
 

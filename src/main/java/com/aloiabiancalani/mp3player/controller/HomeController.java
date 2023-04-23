@@ -38,7 +38,6 @@ public class HomeController {
     @FXML
     private Button forwardBtn;
 
-
     @FXML
     private Button playBtn;
 
@@ -70,136 +69,6 @@ public class HomeController {
     public String getFolderPath() {
         return folderPath;
     }
-
-    public void setFolderPath(String folderPath) {
-        this.folderPath = folderPath;
-    }
-
-    private void handleControlButtons() {
-        playBtn.setOnMouseClicked(mouseEvent -> {
-            boolean playing = Playlist.getPlayer().getStatus() == MediaPlayer.Status.PLAYING;
-            if (playing) //pausing
-            {
-                Playlist.getPlayer().pause();
-                handlePauseButton();
-            }
-            else { //playing
-                Playlist.getPlayer().play();
-                handlePlayButton();
-            }
-        });
-
-        forwardBtn.setOnMouseClicked(mouseEvent -> {
-            playNext();
-        });
-
-        backwardBtn.setOnMouseClicked(mouseEvent -> {
-            replay();
-        });
-    }
-
-    private void setupFirstPlay() {
-        Brano playing = Playlist.getPlayingBrano();
-        songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
-        if (playing.getTitolo() != null) {
-            songTitle.setText(playing.getTitolo());
-        }
-        else {
-            String titolo = playing.getTitolo();
-            songTitle.setText(titolo.substring(titolo.lastIndexOf("\\") + 1));
-        }
-        if (playing.getArtista() == null && playing.getAlbum() == null) {
-            songInfo.setText("Artista Sconosciuto - Album Sconosciuto");
-        }
-        else if (playing.getArtista() == null) {
-            songInfo.setText("Artista Sconosciuto - " + playing.getAlbum());
-        }
-        else if (playing.getAlbum() == null) {
-            songInfo.setText(playing.getArtista() + " - Album Sconosciuto");
-        }
-        else {
-            songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
-        }
-        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
-
-        Media song = new Media(new File(playing.getSongPath()).toURI().toString());
-
-        MediaPlayer player = new MediaPlayer(song);
-        player.setOnReady(() -> {
-            player.setOnEndOfMedia(() -> {
-                // Passo alla canzone dopo
-                playNext();
-                player.dispose();
-            });
-        });
-        Playlist.setPlayer(player);
-    }
-
-    private void playNext() {
-        if (Playlist.getPlayingIndex() == Playlist.getPlaylist().size() - 1) {
-            // Se e' arrivato all'ultimo elemento ha finito la coda e quindi si interrompe
-            if(Playlist.getPlayer() != null) {
-                Playlist.getPlayer().pause();
-                handlePauseButton();
-            }
-            return;
-        }
-        if(Playlist.getPlayer() != null) {
-            Playlist.getPlayer().pause();
-        }
-
-        Playlist.forwardPlayingBrano();
-        handlePlayButton();
-        Brano playing = Playlist.getPlayingBrano();
-        songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
-        playingBrano(playing);
-    }
-
-    private void replay() {
-        if(Playlist.getPlayer() != null) {
-            Playlist.getPlayer().pause();
-        }
-
-        Playlist.backwardPlayingBrano();
-        handlePlayButton();
-
-        Brano playing = Playlist.getPlayingBrano();
-        songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
-        playingBrano(playing);
-    }
-
-    private void playBrano(Brano playing) {
-        playingBrano(playing);
-    }
-
-    // setup informazioni sul brano corrente e riproduzione
-    private void playingBrano(Brano playing) {
-        songTitle.setText(playing.getTitolo());
-        if (playing.getArtista() == null && playing.getAlbum() == null) {
-            songInfo.setText("Artista Sconosciuto - Album Sconosciuto");
-        }
-        else if (playing.getArtista() == null) {
-            songInfo.setText("Artista Sconosciuto - " + playing.getAlbum());
-        }
-        else if (playing.getAlbum() == null) {
-            songInfo.setText(playing.getArtista() + " - Album Sconosciuto");
-        }
-        else {
-            songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
-        }
-        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
-        Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString()); // set path del brano
-        MediaPlayer player = new MediaPlayer(song);
-        player.setOnReady(() -> { // riproduzione brano
-            player.play();
-            player.setOnEndOfMedia(() -> {
-                player.dispose();
-                playNext();
-            });
-        });
-        Playlist.setPlayer(player);
-    }
-
 
     // setup tabella
     private void setupTableView() {
@@ -348,22 +217,144 @@ public class HomeController {
             loadingStage.show(); // mostra finestra di caricamento
 
             folderPath = file.getAbsolutePath();
+        }
+    }
+
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
+    }
+
+    // handler per il controllo della riproduzione
+    private void handleControlButtons() {
+        playBtn.setOnMouseClicked(mouseEvent -> {
+            boolean playing = Playlist.getPlayer().getStatus() == MediaPlayer.Status.PLAYING;
+            if (playing) //pausing
+            {
+                Playlist.getPlayer().pause();
+                handlePauseButton();
+            }
+            else { //playing
+                Playlist.getPlayer().play();
+                handlePlayButton();
+            }
+        });
+
+        forwardBtn.setOnMouseClicked(mouseEvent -> {
+            playNext();
+        });
+
+        backwardBtn.setOnMouseClicked(mouseEvent -> {
+            replay();
+        });
+    }
+
+    // setup riproduzione
+    private void setupFirstPlay() {
+        Brano playing = Playlist.getPlayingBrano();
+        songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
+        if (playing.getTitolo() != null) {
+            songTitle.setText(playing.getTitolo());
+        }
+        else {
+            String titolo = playing.getTitolo();
+            songTitle.setText(titolo.substring(titolo.lastIndexOf("\\") + 1));
+        }
+        if (playing.getArtista() == null && playing.getAlbum() == null) {
+            songInfo.setText("Artista Sconosciuto - Album Sconosciuto");
+        }
+        else if (playing.getArtista() == null) {
+            songInfo.setText("Artista Sconosciuto - " + playing.getAlbum());
+        }
+        else if (playing.getAlbum() == null) {
+            songInfo.setText(playing.getArtista() + " - Album Sconosciuto");
+        }
+        else {
+            songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
+        }
+        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
+
+        Media song = new Media(new File(playing.getSongPath()).toURI().toString());
+
+        MediaPlayer player = new MediaPlayer(song);
+        player.setOnReady(() -> {
+            player.setOnEndOfMedia(() -> {
+                // Passo alla canzone dopo
+                playNext();
+                player.dispose();
+            });
+        });
+        Playlist.setPlayer(player);
+    }
 
 
+    // gestione riproduzione brano corrente
+    private void playBrano(Brano playing) {
+        playingBrano(playing);
+    }
+
+    // setup informazioni sul brano corrente e riproduzione
+    private void playingBrano(Brano playing) {
+        songTitle.setText(playing.getTitolo());
+        if (playing.getArtista() == null && playing.getAlbum() == null) {
+            songInfo.setText("Artista Sconosciuto - Album Sconosciuto");
+        }
+        else if (playing.getArtista() == null) {
+            songInfo.setText("Artista Sconosciuto - " + playing.getAlbum());
+        }
+        else if (playing.getAlbum() == null) {
+            songInfo.setText(playing.getArtista() + " - Album Sconosciuto");
+        }
+        else {
+            songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
+        }
+        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
+        Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString()); // set path del brano
+        MediaPlayer player = new MediaPlayer(song);
+        player.setOnReady(() -> { // riproduzione brano
+            player.play();
+            player.setOnEndOfMedia(() -> {
+                player.dispose();
+                playNext();
+            });
+        });
+        Playlist.setPlayer(player);
+    }
+
+
+    // gestione riproduzione della prossima canzone
+    private void playNext() {
+        if (Playlist.getPlayingIndex() == Playlist.getPlaylist().size() - 1) {
+            // Se e' arrivato all'ultimo elemento ha finito la coda e quindi si interrompe
+            if(Playlist.getPlayer() != null) {
+                Playlist.getPlayer().pause();
+                handlePauseButton();
+            }
+            return;
+        }
+        if(Playlist.getPlayer() != null) {
+            Playlist.getPlayer().pause();
         }
 
-
-
+        Playlist.forwardPlayingBrano();
+        handlePlayButton();
+        Brano playing = Playlist.getPlayingBrano();
+        songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
+        playingBrano(playing);
     }
 
+    // gestione replay della canzone corrente
+    private void replay() {
+        if(Playlist.getPlayer() != null) {
+            Playlist.getPlayer().pause();
+        }
 
+        Playlist.backwardPlayingBrano();
+        handlePlayButton();
 
-    // playlist shuffle handler
-    @FXML
-    private void handleShuffle(MouseEvent mouseEvent) {
-        Playlist.shuffle();
+        Brano playing = Playlist.getPlayingBrano();
+        songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
+        playingBrano(playing);
     }
-
 
     // switch da play a pause button
     @FXML
@@ -384,4 +375,14 @@ public class HomeController {
         icon.setTabSize(8);
         playBtn.setGraphic(icon);
     }
+
+
+    // playlist shuffle handler
+    @FXML
+    private void handleShuffle(MouseEvent mouseEvent) {
+        Playlist.shuffle();
+    }
+
+
+
 }

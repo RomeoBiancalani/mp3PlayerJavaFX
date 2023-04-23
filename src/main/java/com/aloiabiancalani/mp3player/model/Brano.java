@@ -11,9 +11,9 @@ public class Brano implements Serializable {
         this.titolo = titolo;
         this.artista = artista;
         this.album = album;
-        this.pathCopertina = pathCopertina;
+        this.pathCopertina = pathCopertina; // path della copertina
         this.lunghezzaInSecondi = lunghezzaInSecondi;
-        this.songPath = songPath;
+        this.songPath = songPath; // path del file mp3
     }
 
     public String getTitolo() {

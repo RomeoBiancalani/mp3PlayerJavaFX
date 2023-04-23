@@ -23,19 +23,14 @@ public class LoadingController {
 
 
 
-    //start thread to load mp3 files
+    //start thread per caricare i file mp3
     public void startTask(String loadingPath, Stage loadingStage) {
         this.loadingPath = loadingPath; // set path cartella
         this.stage = loadingStage; // set stage
 
         System.out.println("Caricamento cartella " + loadingPath);
         FolderLoader folderLoader = new FolderLoader(loadingPath);
-        progressBar.progressProperty().bind(folderLoader.progressProperty()); //bind the progress bar to the worker thread
-
-        // event listener per tracciare il valore della progress bar
-        progressBar.progressProperty().addListener(observable -> {
-                System.out.println("Changed: " + progressBar.progressProperty().get());
-        });
+        progressBar.progressProperty().bind(folderLoader.progressProperty()); //bind progress bar al worker thread
 
         try {
             new Thread(folderLoader).start();
@@ -55,8 +50,4 @@ public class LoadingController {
         });
     }
 
-    @FXML
-    public void cancelTask() {
-        // cancel task if running
-    }
 }
