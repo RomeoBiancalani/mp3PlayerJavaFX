@@ -51,6 +51,9 @@ public class Playlist implements Serializable {
     public static void setPlaylist(ObservableList<Brano> playlist) {
         Playlist.playlist = playlist;
     }
+    public static void clearPlaylist() {
+        Playlist.playlist.clear();
+    }
     public static void addBrano(Brano brano) {
         Playlist.playlist.add(brano);
     }

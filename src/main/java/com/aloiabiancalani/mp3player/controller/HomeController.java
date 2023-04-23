@@ -271,7 +271,7 @@ public class HomeController {
         else {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
-        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
+        songCover.setFill(new ImagePattern(new Image(new File(playing.getPathCopertina()).toURI().toString())));
 
         Media song = new Media(new File(playing.getSongPath()).toURI().toString());
 
@@ -307,8 +307,9 @@ public class HomeController {
         else {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
-        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
-        Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString()); // set path del brano
+        songCover.setFill(new ImagePattern(new Image(new File(playing.getPathCopertina()).toURI().toString())));
+//        Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString()); // set path del brano
+        Media song = new Media(new File(playing.getSongPath()).toURI().toString()); // set path del brano
         MediaPlayer player = new MediaPlayer(song);
         player.setOnReady(() -> { // riproduzione brano
             player.play();
@@ -380,7 +381,10 @@ public class HomeController {
     // playlist shuffle handler
     @FXML
     private void handleShuffle(MouseEvent mouseEvent) {
+        Brano playing = Playlist.getPlayingBrano();
         Playlist.shuffle();
+        int newIndex = Playlist.getPlaylist().indexOf(playing);
+        Playlist.setPlayingIndex(newIndex);
     }
 
 

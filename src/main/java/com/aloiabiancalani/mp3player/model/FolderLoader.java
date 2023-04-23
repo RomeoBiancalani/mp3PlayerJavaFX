@@ -27,6 +27,7 @@ public class FolderLoader extends Task<Void> {
     protected Void call() throws Exception {
 //        System.out.println("Thread start!");
         File mp3Folder = new File(loadingPath);
+        Playlist.clearPlaylist();
         File dataFolder = new File(Paths.get(mp3Folder.getAbsolutePath() + "/.data").toUri());
         if (dataFolder.exists()) {
 //            System.out.println("Cartella .data gia' esistente");
