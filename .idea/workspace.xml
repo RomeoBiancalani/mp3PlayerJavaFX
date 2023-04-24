@@ -2,26 +2,23 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="mp3PlayerJavaFX:jar" />
+      <artifact name="AloiaBiancalani_mp3PlayerJavaFX:jar" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="abc491d7-2b72-4df8-b720-94190e42af46" name="Changes" comment="" />
+    <list default="true" id="fa6d68cc-fc9b-4f4a-a210-e650b28d44e3" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2OmLLXFFJPLbuIpLr5fmLcVUmoc" />
+  <component name="ProjectId" id="2OsT1Kjpc9unboxd3RKOrTVlT1n" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -32,23 +29,33 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "last_opened_file_path": "/home/giulia/Desktop",
     "project.structure.last.edited": "Artifacts",
-    "project.structure.proportion": "0.15",
+    "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.2"
   }
 }]]></component>
-  <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/src/main/resources/com/aloiabiancalani/mp3player/view" />
-    </key>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="AloiaBiancalani_mp3PlayerJavaFX" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="AloiaBiancalani_mp3PlayerJavaFX" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="abc491d7-2b72-4df8-b720-94190e42af46" name="Changes" comment="" />
-      <created>1682160755202</created>
+      <changelist id="fa6d68cc-fc9b-4f4a-a210-e650b28d44e3" name="Changes" comment="" />
+      <created>1682348073201</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1682160755202</updated>
+      <updated>1682348073201</updated>
     </task>
     <servers />
   </component>
