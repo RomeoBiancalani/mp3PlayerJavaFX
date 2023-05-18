@@ -246,6 +246,7 @@ public class HomeController {
     // setup riproduzione
     private void setupFirstPlay() {
         Brano playing = Playlist.getPlayingBrano();
+        System.out.println("Playing brano: " + playing);
         songsTable.getSelectionModel().select(Playlist.getPlayingIndex());
         if (playing.getTitolo() != null) {
             songTitle.setText(playing.getTitolo());
@@ -266,7 +267,7 @@ public class HomeController {
         else {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
-        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
+        songCover.setFill(new ImagePattern(new Image(new File(playing.getPathCopertina()).toURI().toString())));
 
         Media song = new Media(new File(playing.getSongPath()).toURI().toString());
 
@@ -302,7 +303,7 @@ public class HomeController {
         else {
             songInfo.setText(playing.getArtista() + " - " + playing.getAlbum());
         }
-        songCover.setFill(new ImagePattern(new Image(playing.getPathCopertina())));
+        songCover.setFill(new ImagePattern(new Image(new File(playing.getPathCopertina()).toURI().toString())));
         Media song = new Media(new File(playing.getSongPath().replace("/","\\")).toURI().toString()); // set path del brano
         MediaPlayer player = new MediaPlayer(song);
         player.setOnReady(() -> { // riproduzione brano
